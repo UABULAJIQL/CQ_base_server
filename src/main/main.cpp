@@ -1,12 +1,6 @@
 #include <iostream>
 
-#include "tools/test.cpp"
-
 int main() {
-
-    Test t;
-
-
-
+    std::cout << "111" << std::endl;
     return 0;
 }
