@@ -1,16 +1,19 @@
 #ifndef _OBJPOOL_H
 #define _OBJPOOL_H
 
-#include <queue>
 
+#include "I_objPool.h"
 #include "struct/cacheRefresh.hpp"
+
 #include <iostream>
+#include <queue>
 
 // 这是一个对象池类 任意T类型
 // 由于打算一个线程中一个线程池管理 所以这里不使用锁
-template <typename T> class ObjPool {
+template <typename T> class ObjPool : public IObjPool {
   public:
     ObjPool(bool systolic = false, std::size_t initCount = 10);
+    // ObjPool(bool systolic = true, std::size_t initCount = 3);
 
     // 分配对象
     template <typename... Targs> T *mallocObj(Targs... args);
@@ -22,10 +25,10 @@ template <typename T> class ObjPool {
     template <typename... Targs> void expansionObjs(Targs... args);
 
     // 更新数据
-    void update();
+    void update() override;
 
     // 输出信息
-    void show() const;
+    void show() const override;
 
     // 启动收缩
     void openSystolic();
@@ -35,6 +38,9 @@ template <typename T> class ObjPool {
 
     // 收缩
     void systolicFun();
+
+    // 释放资源
+    void releaseRes() override;
 
   protected:
     // 是否要自动收缩
@@ -124,7 +130,7 @@ template <typename T> void ObjPool<T>::update() {
 }
 
 template <typename T> void ObjPool<T>::show() const {
-    std::cout << "线程池中的总对象有：" << _total;
+    std::cout << typeid(T).name() << "对象池中的总对象有：" << _total;
     std::cout << " 自由对象有：" << _free.size();
     std::cout << " 工作对象有：" << _work.workObjCount();
     std::cout << " 将要去工作的对象有：" << _work.addObjCount();
@@ -151,6 +157,20 @@ template <typename T> void ObjPool<T>::systolicFun() {
 
             --_total;
         }
+    }
+}
+
+template <typename T> void ObjPool<T>::releaseRes() {
+
+    _work.releaseRes();
+
+    while (!_free.empty()) {
+        auto temp = _free.front();
+
+        temp->releaseRes();
+
+        delete temp;
+        _free.pop();
     }
 }
 

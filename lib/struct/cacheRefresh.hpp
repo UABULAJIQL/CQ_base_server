@@ -7,10 +7,12 @@
 #include <queue>
 #include <set>
 
+#include "tools/I_release.h"
+
 // 一个数据结构
 // 为了将要添加的 或者 要移除的 对象 存储起来 到下一帧 统一执行 从而减少锁
 
-template <typename T> class CacheRefresh {
+template <typename T> class CacheRefresh : public IRelease {
   public:
     // std::set<T *> *getReaderCache();
 
@@ -29,6 +31,8 @@ template <typename T> class CacheRefresh {
     std::size_t addObjCount() const;
 
     std::size_t removeObjCount() const;
+
+    void releaseRes() override;
 
   private:
     // 需要查找相对快点
@@ -93,6 +97,23 @@ template <typename T> std::size_t CacheRefresh<T>::addObjCount() const {
 }
 template <typename T> std::size_t CacheRefresh<T>::removeObjCount() const {
     return _removesObjCount;
+}
+
+template <typename T> void CacheRefresh<T>::releaseRes() {
+    if (0 != workObjCount()) {
+        for (const auto &temp : _workObjs) {
+            temp->releaseRes();
+            delete temp;
+        }
+        _workObjs.clear();
+    }
+    if (0 != addObjCount()) {
+        for (const auto &temp : _adds) {
+            temp->releaseRes();
+            delete temp;
+        }
+        _adds.clear();
+    }
 }
 
 #endif
