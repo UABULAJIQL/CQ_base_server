@@ -11,4 +11,4 @@ aux_source_directory(./ files)
 add_executable(main ${files})
 
 #添加库文件
-target_link_libraries(main mylib)
+target_link_libraries(main mylib pthread)

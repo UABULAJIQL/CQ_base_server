@@ -12,6 +12,7 @@ void ObjPoolMgr::show() const {
 }
 
 void ObjPoolMgr::releaseRes() {
+    std::cout << "对象池管理的资源释放" << std::endl;
     for (const auto &temp : _pools) {
         temp.second->releaseRes();
         delete temp.second;

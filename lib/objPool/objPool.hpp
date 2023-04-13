@@ -1,7 +1,6 @@
 #ifndef _OBJPOOL_H
 #define _OBJPOOL_H
 
-
 #include "I_objPool.h"
 #include "struct/cacheRefresh.hpp"
 
@@ -161,6 +160,8 @@ template <typename T> void ObjPool<T>::systolicFun() {
 }
 
 template <typename T> void ObjPool<T>::releaseRes() {
+
+    std::cout << "对象池的资源释放" << std::endl;
 
     _work.releaseRes();
 

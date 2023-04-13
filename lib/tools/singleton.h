@@ -23,6 +23,7 @@ template <typename T> class Singleton {
     static void destroyInstance() {
         delete m_pInstance;
         m_pInstance = nullptr;
+        std::cout << typeid(T).name() << "单例释放成功" << std::endl;
     }
 
   private:

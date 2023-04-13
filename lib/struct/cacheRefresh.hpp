@@ -100,6 +100,7 @@ template <typename T> std::size_t CacheRefresh<T>::removeObjCount() const {
 }
 
 template <typename T> void CacheRefresh<T>::releaseRes() {
+    std::cout << "交换数据中的资源释放" << std::endl;
     if (0 != workObjCount()) {
         for (const auto &temp : _workObjs) {
             temp->releaseRes();

@@ -3,7 +3,6 @@
 
 #include "tools/I_release.h"
 
-// 这个类没啥用就是为了 可以存储到objPoolMgr中的容器中
 class IObjPool : public IRelease {
   public:
     virtual void update() = 0;

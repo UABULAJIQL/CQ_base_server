@@ -8,8 +8,6 @@ template <typename... Targs> class IInPoolObj : public IRelease {
     // 拿出池的时候初始化
     virtual void init(Targs... args) = 0;
 
-    // virtual void releaseRes() override = 0;
-
     // 回归池中的时候释放清空资源
     virtual void clearn() = 0;
 

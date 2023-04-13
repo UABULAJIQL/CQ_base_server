@@ -3,9 +3,10 @@ include_directories(${PROJECT_SOURCE_DIR}/lib)
 
 #多个源代码文件名放入到一个变量中
 aux_source_directory(./ _libs)
-aux_source_directory(./tools _libs)
 aux_source_directory(./objPool _libs)
 aux_source_directory(./struct _libs)
+aux_source_directory(./thread _libs)
+aux_source_directory(./tools _libs)
 
 
 
